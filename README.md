@@ -1,6 +1,6 @@
 # yearmonth 
 
-A simple dataclass type that interfaces with pydantic.
+A simple ISO8601 compliant dataclass type that is interoperable with `pydantic`. 
 
 
 Example usage: 
@@ -9,12 +9,16 @@ Example usage:
 from yearmonth import YearMonth
 
 ym = YearMonth(2021, 1)  
+ym1 = YearMonth(2022, 1)
 
 validated_ym = YearMonth.create((2021, 1))
 from_iso_str = YearMonth.create('2021-01')
 
+# comparability
+ym1 > ym  # True
 
-# import pydantic 
+
+import pydantic 
 
 class UseWithPydantic(pydantic.BaseModel): 
     

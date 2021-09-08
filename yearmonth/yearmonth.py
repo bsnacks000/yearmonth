@@ -135,6 +135,9 @@ class YearMonth(object):
             return True 
         return False
 
+    def __hash__(self) -> int:
+        return hash((self.year, self.month))
+
 
 def date_to_ym(d: datetime.date) -> YearMonth:
     """Convert a datetime.date to a YearMonth. Drops the day value.

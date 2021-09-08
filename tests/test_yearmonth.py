@@ -147,3 +147,14 @@ def test_yearmonth_rangefrom_fails_if_initial_gt_instance():
 
     with pytest.raises(ValueError):
         ym2.range_from(ym)
+
+
+def test_yearmonth_is_hashable(): 
+
+    ym = YearMonth(2021, 1)
+    ym1 = YearMonth(2021, 1)
+    ym2 = YearMonth(2022, 1)
+
+    x = set([ym, ym1, ym2])
+
+    assert len(x) == 2 
