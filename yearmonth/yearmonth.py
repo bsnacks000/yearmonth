@@ -1,4 +1,4 @@
-from typing import Any, Dict, Generator, Tuple, Union, List
+from typing import Any, Dict, Iterator, Tuple, Union, List
 import datetime 
 from dataclasses import dataclass
 import calendar
@@ -12,8 +12,14 @@ YearMonthBoundary = Union[str, Tuple[int, int], Tuple[str, str], 'YearMonth']
 
 @dataclass(eq=True, order=True)
 class YearMonth(object):
-    """A custom YearMonth type. 
+    """An ISO8601 compliant year-month dataclass.
+
+    Attributes: 
+        year (int): The year 
+        month (int): The month  
+
     """
+
     year: int
     month: int 
 
@@ -52,14 +58,14 @@ class YearMonth(object):
     def create(cls, v: YearMonthBoundary) -> 'YearMonth':
         """A factory method that runs a set of validators before returning a YearMonth. 
         Will validate against 'YYYY-MM', ('YYYY', 'MM') or (int, int). If a YearMonth is passed to 
-        this method will return a new instance of the object.  
+        this method it will return a new instance of the object.  
 
         Args:
             v (YearMonthBoundary): A Union type of ISO string, 
-                Tuple of either int or string that can be casted to an int or a YearMonth instance. 
+                Tuple of int like or a YearMonth instance. 
 
         Returns:
-            [type]: [description]
+            YearMonth: An instance of this class
         """
         if isinstance(v, str): 
             year, month = cls._parse_yearmonth_str(v)
@@ -87,10 +93,11 @@ class YearMonth(object):
         day of the month.
 
         Args:
-            first (bool, optional): [description]. Defaults to True.
+            first (bool, optional): Whether to use the first day of the month. If False uses the 
+            last day. Defaults to True.
 
         Returns:
-            datetime.date: [description]
+            datetime.date: A datetime.date either first or last day of month.
         """
         if first:
             return datetime.date(self.year, self.month, 1)
@@ -129,9 +136,6 @@ class YearMonth(object):
         return False
 
 
-
-
-
 def date_to_ym(d: datetime.date) -> YearMonth:
     """Convert a datetime.date to a YearMonth. Drops the day value.
 
@@ -145,23 +149,17 @@ def date_to_ym(d: datetime.date) -> YearMonth:
     return YearMonth(tt.tm_year, tt.tm_mon)
 
 
-def monthrange(start: datetime.date, end: datetime.date) -> Generator[datetime.date, None, None]: 
-    """Given two arbitrary datetimes will yield datetimes at each month boundary.
-
-    NOTE: based on based on https://stackoverflow.com/questions/35650793/python-get-all-months-in-range
+def monthrange(start: datetime.date, end: datetime.date) -> Iterator[datetime.date]: 
+    """Given two arbitrary datetimes will yield datetimes at each month boundary. If 
+    start is greater then end will simply yield nothing.
 
     Args:
-        start (datetime.date): [description]
-        end (datetime.date): [description]
-
-    Returns:
-        [type]: [description]
+        start (datetime.date): The start datetime.date.
+        end (datetime.date): The end datetime.date.
 
     Yields:
-        Generator[YearMonth, None, None]: [description]
+        Iterator[datetime.date]: The next datetime.date.
     """
-
-    assert end >= start, "end date must greater then or equal to start date"    
     s = datetime.date(start.year, start.month, 1)
     e = datetime.date(end.year, end.month, end.day)
     
