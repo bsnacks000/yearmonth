@@ -2,7 +2,6 @@ from typing import Any, Dict, Iterator, Tuple, Union, List
 import datetime 
 from dataclasses import dataclass
 import calendar
-import functools
 import datetime
 
 import re
@@ -77,7 +76,6 @@ class YearMonth(object):
         return cls(year=year, month=month)  
 
 
-    @functools.cached_property
     def ldom(self) -> int:
         """Get the last day of the month for this year.
 
@@ -102,7 +100,7 @@ class YearMonth(object):
         if first:
             return datetime.date(self.year, self.month, 1)
         else:
-            return datetime.date(self.year, self.month, self.ldom)        
+            return datetime.date(self.year, self.month, self.ldom())        
 
 
     def range_from(self, initial: 'YearMonth') -> List['YearMonth']:
