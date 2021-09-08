@@ -33,7 +33,7 @@ class UseWithPydantic(pydantic.BaseModel):
     @pydantic.validator('ym')
     def validate_ym(cls, v): 
         if v.year == 2020:
-            raise ValueError('2020 sucks')
+            raise ValueError(':(')
         return v
 
 ```
